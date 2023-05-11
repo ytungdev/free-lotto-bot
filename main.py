@@ -61,7 +61,7 @@ class LottoWeb(object):
         options = Options()
         # options.add_experimental_option("detach", True)
         options.add_argument("--headless")
-        exe = os.getenv('KEY_THAT_MIGHT_EXIST', False)
+        exe = os.getenv('DRIVERPATH', False)
         print(f"EXE : {exe}\n")
         if not exe:
             self.driver = webdriver.Chrome(options=options)
