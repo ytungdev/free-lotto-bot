@@ -54,8 +54,13 @@ def do_enrol(web):
 class LottoWeb(object):
     def __init__(self) -> None:
         options = Options()
-        options.add_experimental_option("detach", True)
-        self.driver = webdriver.Chrome(options=options)
+        # options.add_experimental_option("detach", True)
+        options.add_argument("--headless")
+        exe = os.getenv('KEY_THAT_MIGHT_EXIST', False)
+        if not exe:
+            self.driver = webdriver.Chrome(options=options)
+        else:
+            self.driver = webdriver.Chrome(exe, options=options)
     
     def go_to(self, url):
         self.driver.get(url)
