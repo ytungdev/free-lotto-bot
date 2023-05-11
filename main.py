@@ -21,7 +21,12 @@ login_actions = [
 
 enroll_actions =[]
 def form_choice():
-    choice = [int(n) for n in os.environ.get("LUCKYNUM").split(" ")]
+    LUCKYNUM = os.getenv('LUCKYNUM', False)
+    print(f"LUCKNUM : {LUCKYNUM}\n")
+    if not LUCKYNUM:
+        choice = []
+    else:
+        choice = [int(n) for n in LUCKYNUM.split(" ")]
     choices = []
     for i in range(1,76):
         i not in choice and choices.append(i)
@@ -57,7 +62,7 @@ class LottoWeb(object):
         # options.add_experimental_option("detach", True)
         options.add_argument("--headless")
         exe = os.getenv('KEY_THAT_MIGHT_EXIST', False)
-        print(f"exe : {exe}\n")
+        print(f"EXE : {exe}\n")
         if not exe:
             self.driver = webdriver.Chrome(options=options)
         else:
@@ -85,4 +90,3 @@ if __name__ == '__main__':
     do_login(web)
     time.sleep(0.5)
     do_enrol(web)
-    
