@@ -2,6 +2,7 @@ from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.common.action_chains import ActionChains
+from selenium.common.exceptions import NoSuchElementException
 
 import time
 import random
@@ -19,7 +20,6 @@ login_actions = [
 ]
 
 enroll_actions =[]
-
 def form_choice():
     choice = [int(n) for n in os.environ.get("LUCKYNUM").split(" ")]
     choices = []
@@ -28,7 +28,6 @@ def form_choice():
     rnd = random.sample(choices, 6-len(choice))
     choice.extend(rnd)
     return sorted(choice)
-
 def choice2action(choice):
     for n in choice:
         enroll_actions.append((f"B0ID_{n}", "click"))
@@ -44,9 +43,13 @@ def do_enrol(web):
     print(f"DO : ENROL - {choice}")
     choice2action(choice)
     web.go_to("https://www.lottery.co.uk/free-lottery/play?lottery=daily")
-    web.do_actions(enroll_actions)
-    web.do_action('submit_ticket', 'click')
-    print()
+    try:
+        enable = web.driver.find_element(By.ID, 'submit_ticket').is_enabled()
+        web.do_actions(enroll_actions)
+        web.do_action('submit_ticket', 'click')
+        print()
+    except NoSuchElementException:
+        print('UNABLE TO ENROL')
 
 class LottoWeb(object):
     def __init__(self) -> None:
@@ -72,9 +75,8 @@ class LottoWeb(object):
         print(f"action : {eid:<20} | {action}")
 
 if __name__ == '__main__':
-    # web = LottoWeb()
-    # do_login(web)
-    # time.sleep(1)
-    # do_enrol(web)
-    print(login_actions)
-    print(form_choice())
+    web = LottoWeb()
+    do_login(web)
+    time.sleep(0.5)
+    do_enrol(web)
+    
