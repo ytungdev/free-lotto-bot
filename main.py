@@ -5,18 +5,23 @@ from selenium.webdriver.common.action_chains import ActionChains
 
 import time
 import random
+import os
+import json
+from dotenv import load_dotenv
+
+load_dotenv()
 
 login_actions = [
     ("panelButton", "click"),
-    ("Email0", "ytung.shop@gmail.com"),
-    ("Password0", "Mybday199681"),
+    ("Email0", os.getenv('EMAIL')),
+    ("Password0", os.getenv('PASSWORD')),
     ("submit_login_details", "click")
 ]
 
 enroll_actions =[]
 
 def form_choice():
-    choice = [9, 27]
+    choice = [int(n) for n in os.environ.get("LUCKYNUM").split(" ")]
     choices = []
     for i in range(1,76):
         i not in choice and choices.append(i)
@@ -28,17 +33,15 @@ def choice2action(choice):
     for n in choice:
         enroll_actions.append((f"B0ID_{n}", "click"))
 
-def main():
-    web = LottoWeb()
+def do_login(web):
     print(f"DO : LOGIN")
     web.go_to("https://www.lottery.co.uk/free-lottery")
     web.do_actions(login_actions)
     print()
-    
-    time.sleep(1)
 
+def do_enrol(web):
     choice = form_choice()
-    print(f"DO : ENROLL - {choice}")
+    print(f"DO : ENROL - {choice}")
     choice2action(choice)
     web.go_to("https://www.lottery.co.uk/free-lottery/play?lottery=daily")
     web.do_actions(enroll_actions)
@@ -67,6 +70,11 @@ class LottoWeb(object):
         else:
             element.send_keys(action)
         print(f"action : {eid:<20} | {action}")
-        
+
 if __name__ == '__main__':
-    main()
+    # web = LottoWeb()
+    # do_login(web)
+    # time.sleep(1)
+    # do_enrol(web)
+    print(login_actions)
+    print(form_choice())
