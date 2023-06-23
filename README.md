@@ -1,4 +1,4 @@
-# auto-lotto
+# free-lotto-bot
 Automatically enrol into a [free-lottery](https://www.lottery.co.uk/free-lottery) ticket.
 
 ## Requirement
