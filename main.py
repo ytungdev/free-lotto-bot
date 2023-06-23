@@ -72,9 +72,10 @@ class LottoWeb(object):
             self.do_action(eid, action)
     
     def do_action(self, eid, action):
+        actionC = ActionChains(self.driver)
         element = self.driver.find_element(By.ID,eid)
         if action == 'click':
-            element.click()
+            actionC.move_to_element(element).click().perform()
         else:
             element.send_keys(action)
         print(f"action : {eid:<20} | {action}")
